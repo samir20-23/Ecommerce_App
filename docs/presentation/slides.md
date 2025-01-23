@@ -113,6 +113,7 @@
 |||
 
 #### **3.2. Diagramme de Gantt:**
+<img src="./img/gant.png" alt="2TUP" style="width: 600px; height: auto;" />
 
 ---
 
