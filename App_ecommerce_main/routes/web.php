@@ -25,3 +25,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 Route::resource('admin', DashboardController::class); 
 Route::resource('dashboard', DashboardController::class);
+
+
+// 
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('products', ManageProducts::class);
+    Route::resource('users', ManageUsers::class);
+});
+// 
+Route::get('/products', [ManageProducts::class, 'index'])->name('products.index');
+Route::post('/products', [ManageProducts::class, 'store'])->name('products.store');
+Route::get('/admin/products/create', [ProductController::class, 'create'])->name('admin.products.create');
