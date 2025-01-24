@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\ProductRepositoryInterface;
 use Illuminate\Http\Request;
-
+use App\Models\Product;
 class ManageProducts extends Controller
 {
     protected $productRepository;
@@ -40,15 +40,13 @@ class ManageProducts extends Controller
 
         $imgPath = null;
 
-        // Handle image upload
         if ($request->hasFile('img_path')) {
             $imageName = time() . '_' . $request->file('img_path')->getClientOriginalName();
             $request->file('img_path')->move(public_path('images/products'), $imageName);
             $imgPath = 'images/products/' . $imageName;
         }
 
-        // Create product using repository
-        $this->productRepository->create([
+        Product::create([
             'title' => $request->title,
             'description' => $request->description,
             'price' => $request->price,
@@ -56,7 +54,7 @@ class ManageProducts extends Controller
             'img_path' => $imgPath,
         ]);
 
-        return redirect()->route('admin.products.index')->with('success', 'Product added successfully!');
+        return response()->json(['message' => 'Product added successfully!']);
     }
 
     // Show a single product

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -68,6 +69,62 @@ class DatabaseSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'title' => 'Luxury Watch',
+                'description' => 'A luxury watch for special occasions.',
+                'price' => 999.99,
+                'stock' => 10,
+                'img_path' => 'images/products/watch_5.png', // Use forward slashes
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'title' => 'Luxury Watch',
+                'description' => 'A luxury watch for special occasions.',
+                'price' => 999.99,
+                'stock' => 10,
+                'img_path' => 'images/products/watch_6.png', // Use forward slashes
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'title' => 'Luxury Watch',
+                'description' => 'A luxury watch for special occasions.',
+                'price' => 999.99,
+                'stock' => 10,
+                'img_path' => 'images/products/watch_7.png', // Use forward slashes
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'title' => 'Luxury Watch',
+                'description' => 'A luxury watch for special occasions.',
+                'price' => 999.99,
+                'stock' => 10,
+                'img_path' => 'images/products/watch_8.png', // Use forward slashes
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'title' => 'Luxury Watch',
+                'description' => 'A luxury watch for special occasions.',
+                'price' => 999.99,
+                'stock' => 10,
+                'img_path' => 'images/products/watch_9.png', // Use forward slashes
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'title' => 'Luxury Watch',
+                'description' => 'A luxury watch for special occasions.',
+                'price' => 999.99,
+                'stock' => 10,
+                'img_path' => 'images/products/watch_10.png', // Use forward slashes
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
+     
+        
     }
 }
