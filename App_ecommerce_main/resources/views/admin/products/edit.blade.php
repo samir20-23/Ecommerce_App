@@ -1,12 +1,4 @@
-@extends('layouts.app')
-
-@section('title', 'Edit Product')
-
-@section('content')
-<div class="container">
-    <h1 class="mb-4">Edit Product</h1>
-
-    <form id="updateProductForm" enctype="multipart/form-data">
+<form action="{{ route('products.update') }}" method="POST" id="addProduct">
         @csrf
         @method('PUT')
         <div class="mb-3">
@@ -46,5 +38,4 @@
 
         <button type="submit" class="btn btn-warning">Update Product</button>
     </form>
-</div>
-@endsection
+

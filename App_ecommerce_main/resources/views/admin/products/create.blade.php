@@ -1,4 +1,4 @@
-<form id="createProductForm" enctype="multipart/form-data">
+<form action="{{ route('products.store') }}" method="POST" id="addProduct">
     @csrf
     <div class="mb-3">
         <label for="title" class="form-label">Title</label>
@@ -27,3 +27,4 @@
 
     <button type="submit" class="btn btn-primary">Create</button>
 </form>
+
