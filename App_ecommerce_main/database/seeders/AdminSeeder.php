@@ -15,10 +15,12 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         //
-        $admin = User::where('email', 'admin@gmail.com')->first() ;
-        $permission = Permission::where('id', 1);
-        $admin->givePermissionTo($permission);
-
+  user::create([
+    'name'=>'admin',
+    'email'=>'admin@gmail.com',
+    'password'=>bcrypt('samir123'),
+    'role'=>'admin',
+  ]);
     }
 }
 

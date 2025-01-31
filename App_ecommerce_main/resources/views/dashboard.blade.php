@@ -1,42 +1,17 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Dashboard') }}
+        </h2>
+    </x-slot>
 
-@section('title', 'Dashboard')
-
-@section('content_header')
-    <div class="container-fluid">
-        <h1 class="mb-4">Product Dashboard</h1>
-
-    
-        <!-- Dashboard Cards -->
-        <div class="row">
-            <!-- Products Card -->
-            <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <i class="fas fa-box fa-3x mb-3"></i> <!-- Icon for products -->
-                        <h1>{{ $totalProducts }}</h1>
-                        <p>Total Products</p>
-                        <a href="{{ route('admin.products.index',$products) }}" class="btn btn-primary">Show More</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Users Card -->
-            <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <i class="fas fa-users fa-3x mb-3"></i> <!-- Icon for users -->
-                        <h1>{{ $totalUsers }}</h1>
-                        <p>Total Users</p>
-                        <a href="{{ route('admin.users.index') }}" class="btn btn-primary">Show More</a>
-                    </div>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    {{ __("You're logged in!") }}
                 </div>
             </div>
         </div>
     </div>
-@endsection
-
-{{-- @forelse ($products as $product)
-                @forelse ($users as $user)
-                <h1>{{$totalProducts}}</h1>
-                <h1>{{$totalUsers}}</h1> --}}
+</x-app-layout>

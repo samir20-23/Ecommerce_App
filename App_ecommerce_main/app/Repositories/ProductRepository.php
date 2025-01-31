@@ -11,9 +11,14 @@ class ProductRepository implements ProductRepositoryInterface
         return Product::all();
     }
 
+    public function getCount()
+    {
+        return Product::count();
+    }
+
     public function getById($id)
     {
-        return Product::findOrFail($id);
+        return Product::find($id);
     }
 
     public function create(array $data)
@@ -23,15 +28,14 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function update($id, array $data)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::find($id);
         $product->update($data);
         return $product;
     }
 
     public function delete($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::find($id);
         $product->delete();
-        return $product;
     }
 }
