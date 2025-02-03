@@ -1,50 +1,26 @@
-@extends('layouts.app')
-
-@section('title', 'Edit Product')
-
-@section('content')
-<div class="container">
-    <h1 class="mb-4">Edit Product</h1>
-
-    <form id="updateProductForm" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
-        <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title', $product->title) }}">
-            @error('title') <div class="invalid-feedback">{{ $message }}</div> @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description">{{ old('description', $product->description) }}</textarea>
-            @error('description') <div class="invalid-feedback">{{ $message }}</div> @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="price" class="form-label">Price</label>
-            <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" step="0.01" value="{{ old('price', $product->price) }}">
-            @error('price') <div class="invalid-feedback">{{ $message }}</div> @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="stock" class="form-label">Stock</label>
-            <input type="number" class="form-control @error('stock') is-invalid @enderror" id="stock" name="stock" value="{{ old('stock', $product->stock) }}">
-            @error('stock') <div class="invalid-feedback">{{ $message }}</div> @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="img_path" class="form-label">Image</label>
-            <input type="file" class="form-control @error('img_path') is-invalid @enderror" id="img_path" name="img_path">
-            @error('img_path') <div class="invalid-feedback">{{ $message }}</div> @enderror
-            @if($product->img_path)
-                <div class="mt-2">
-                    <img src="{{ asset($product->img_path) }}" alt="Product Image" style="width: 100px;">
-                </div>
-            @endif
-        </div>
-
-        <button type="submit" class="btn btn-warning">Update Product</button>
-    </form>
-</div>
-@endsection
+<form id="editProductForm" enctype="multipart/form-data">
+    @csrf
+    @method('PUT')
+    <input type="hidden" name="id" value="{{ $product->id }}">
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title" value="{{ $product->title }}" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea name="description" id="description" rows="3" class="form-control" required>{{ $product->description }}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="price">Price</label>
+        <input type="number" name="price" id="price" step="0.01" value="{{ $product->price }}" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="stock">Stock</label>
+        <input type="number" name="stock" id="stock" value="{{ $product->stock }}" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="img_path">Image</label>
+        <input type="file" name="img_path" id="img_path" class="form-control-file" accept="image/*">
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
