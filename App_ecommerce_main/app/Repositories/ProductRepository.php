@@ -6,9 +6,21 @@ use App\Models\Product;
 
 class ProductRepository implements ProductRepositoryInterface
 {
+    public $pagination = 4;
+    // Default pagination value
+
+    public function pagination($pagination = null)
+    {
+        return Product::paginate($pagination ?? $this->pagination);
+    }
+
     public function getAll()
     {
         return Product::all();
+    }
+    public function query()
+    {
+        return Product::query();
     }
 
     public function getCount()

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Repositories\ProductRepositoryInterface;
 use Illuminate\Http\Request;
 use App\Models\Product;
-class ManageProducts extends Controller
+class ProductController extends Controller
 {
     protected $productRepository;
 
@@ -17,7 +17,7 @@ class ManageProducts extends Controller
     // Display a listing of the resource
     public function index()
     {
-        $products = $this->productRepository->getAll();
+        $products = $this->productRepository->pagination();
         $users = $this->productRepository->getAll();
         return view('admin.products.index', compact('products'));
     }

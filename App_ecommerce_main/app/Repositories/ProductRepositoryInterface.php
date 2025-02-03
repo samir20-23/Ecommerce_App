@@ -4,7 +4,9 @@ namespace App\Repositories;
 
 interface ProductRepositoryInterface
 {
-    public function getAll();          // Fetch all products
+    public function getAll();          // Fetch all product
+    public function query();          // Fetch all product
+    public function pagination();          // for pagination 
     public function getCount();        // Get total count of products
     public function getById($id);      // Fetch product by ID
     public function create(array $data); // Create a new product

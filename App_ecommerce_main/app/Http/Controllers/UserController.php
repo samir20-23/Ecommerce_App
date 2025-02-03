@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 
-class ManageUsers extends Controller
+class UserController extends Controller
 {
     public function __construct(
         protected UserService $userService
