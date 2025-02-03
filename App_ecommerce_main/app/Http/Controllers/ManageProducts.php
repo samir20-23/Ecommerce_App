@@ -2,174 +2,153 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\ProductRepositoryInterface;
 use Illuminate\Http\Request;
 use App\Models\Product;
 
 class ManageProducts extends Controller
 {
-    protected $productRepository;
-
-    public function __construct(ProductRepositoryInterface $productRepository)
-    {
-        $this->productRepository = $productRepository;
-    }
-
-    // Display a listing of the resource
+    /**
+     * Display a listing of the resource with optional filters.
+     */
     public function index(Request $request)
     {
         $query = Product::query();
-    
-        // Apply price range filter if provided
-        if ($request->has('min_price') && $request->has('max_price')) {
+
+        // Filter by price range if both min_price and max_price are provided
+        if ($request->filled('min_price') && $request->filled('max_price')) {
             $query->whereBetween('price', [$request->min_price, $request->max_price]);
         }
-    
-        // Apply in-stock filter if requested
-        if ($request->has('in_stock')) {
+
+        // Filter by stock if requested
+        if ($request->filled('in_stock') && $request->in_stock == 1) {
             $query->where('stock', '>', 0);
         }
-    
-        // Apply title search filter if a search term is provided
-        if ($request->has('search')) {
+
+        // Filter by title search if provided
+        if ($request->filled('search')) {
             $query->where('title', 'like', '%' . $request->search . '%');
         }
-    
-        // Get the filtered products
-        $products = $query->paginate(10); // You can adjust the pagination number
-    
+
+        // Paginate the result (10 per page)
+        $products = $query->paginate(10);
+
         return view('admin.products.index', compact('products'));
     }
-    
 
-    // Show form for creating a product
+    /**
+     * Show the form for creating a new product.
+     */
     public function create()
     {
         return view('admin.products.create');
     }
 
-    // Store a new product
+    /**
+     * Store a newly created product in storage.
+     */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string|max:500',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'img_path' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+        // Validate the incoming request.
+        $validated = $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string|max:500',
+            'price'       => 'required|numeric|min:0',
+            'stock'       => 'required|integer|min:0',
+            'img_path'    => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
-        $imgPath = null;
-
+        // Process image upload, if provided.
         if ($request->hasFile('img_path')) {
             $imageName = time() . '_' . $request->file('img_path')->getClientOriginalName();
             $request->file('img_path')->move(public_path('images/products'), $imageName);
-            $imgPath = 'images/products/' . $imageName;
+            $validated['img_path'] = 'images/products/' . $imageName;
         }
 
-        $product = Product::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'img_path' => $imgPath,
-        ]);
+        // Create the product.
+        $product = Product::create($validated);
 
-        return response()->json(['message' => 'Product added successfully!', 'product' => $product]);
+        return response()->json([
+            'message' => 'Product added successfully!',
+            'product' => $product
+        ]);
     }
 
-
-    // Show a single product
+    /**
+     * Display the specified product.
+     */
     public function show($id)
     {
-        $product = $this->productRepository->getById($id);
+        $product = Product::findOrFail($id);
 
-        if (!file_exists(public_path($product->img_path))) {
+        // If image is missing, set a default image.
+        if (!$product->img_path || !file_exists(public_path($product->img_path))) {
             $product->img_path = 'images/products/default.png';
         }
 
         return view('admin.products.show', compact('product'));
     }
 
-    // Show form for editing a product
+    /**
+     * Show the form for editing the specified product.
+     */
     public function edit($id)
     {
-        $product = $this->productRepository->getById($id);
+        $product = Product::findOrFail($id);
         return view('admin.products.edit', compact('product'));
     }
 
-    // Update a product
+    /**
+     * Update the specified product in storage.
+     */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string|max:500',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'img_path' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+        // Validate request.
+        $validated = $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string|max:500',
+            'price'       => 'required|numeric|min:0',
+            'stock'       => 'required|integer|min:0',
+            'img_path'    => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
         $product = Product::findOrFail($id);
-        $imgPath = $product->img_path;
 
+        // Check if an image file is provided.
         if ($request->hasFile('img_path')) {
-            if ($imgPath && file_exists(public_path($imgPath))) {
-                unlink(public_path($imgPath));
+            // Delete the old image if it exists.
+            if ($product->img_path && file_exists(public_path($product->img_path))) {
+                @unlink(public_path($product->img_path));
             }
             $imageName = time() . '_' . $request->file('img_path')->getClientOriginalName();
             $request->file('img_path')->move(public_path('images/products'), $imageName);
-            $imgPath = 'images/products/' . $imageName;
+            $validated['img_path'] = 'images/products/' . $imageName;
+        } else {
+            // Keep the current image if no new image was uploaded.
+            $validated['img_path'] = $product->img_path;
         }
 
-        $product->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'img_path' => $imgPath,
-        ]);
+        // Update the product.
+        $product->update($validated);
 
-        return response()->json(['message' => 'Product updated successfully!', 'product' => $product]);
+        return response()->json([
+            'message' => 'Product updated successfully!',
+            'product' => $product
+        ]);
     }
 
-    // Delete a product
+    /**
+     * Remove the specified product from storage.
+     */
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
         if ($product->img_path && file_exists(public_path($product->img_path))) {
-            unlink(public_path($product->img_path));
+            @unlink(public_path($product->img_path));
         }
         $product->delete();
 
-        return response()->json(['message' => 'Product deleted successfully!']);
+        return response()->json([
+            'message' => 'Product deleted successfully!'
+        ]);
     }
 }
-
-// filter search
-// / Display a listing of the resource
-//     public function index(Request $request)
-//     {
-// // use App\Models\Product;
-
-//         $query = Product::query();
-    
-//         // Apply price range filter if provided
-//         if ($request->has('min_price') && $request->has('max_price')) {
-//             $query->priceRange($request->min_price, $request->max_price);
-//         }
-    
-//         // Apply in-stock filter if requested
-//         if ($request->has('in_stock')) {
-//             $query->inStock();
-//         }
-    
-//         // Apply title search filter if a search term is provided
-//         if ($request->has('search')) {
-//             $query->search($request->search);
-//         }
-    
-//         // Get the filtered products
-//         $products = $query->paginate(10); // You can change the pagination number
-    
-//         return view('admin.products.index', compact('products'));
-//     }

@@ -25,6 +25,9 @@ Route::resource('dashboard', DashboardController::class);
 
 // 
 
+Route::prefix('admin')->group(function () {
+    Route::resource('products', ManageProducts::class);
+});
 // In case you need them explicitly (but resource() already creates these routes):
 Route::get('/admin/products/create', [ManageProducts::class, 'create'])->name('admin.products.create');
 Route::post('/admin/products', [ManageProducts::class, 'store'])->name('admin.products.store');
