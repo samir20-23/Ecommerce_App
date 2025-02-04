@@ -10,7 +10,18 @@ class ProductRepository implements ProductRepositoryInterface
     {
         return Product::all();
     }
-
+    public function paginate()
+    {
+        return Product::paginate(6);
+    }
+    public function query()
+    {
+        return Product::query();
+    }
+    public function count()
+    {
+        return Product::count();
+    }
     public function getById($id)
     {
         return Product::findOrFail($id);

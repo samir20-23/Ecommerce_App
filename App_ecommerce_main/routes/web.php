@@ -1,38 +1,32 @@
 <?php
 
 use App\Models\Product;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ManageProducts;
 use App\Http\Controllers\ManageUsers;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-// Route::get('/', function () {
-//     return view('product.index');
-// })->name('product.index');
 
 //user
-Route::get('/', [ProductController::class, 'index'])->name('home');
-Route::get('/home', [ProductController::class, 'index'])->name('home');
-Route::get('/product', [ProductController::class, 'index'])->name('home');
-Route::resource('product', ProductController::class);
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/product', [HomeController::class, 'index'])->name('home');
+Route::resource('product', HomeController::class);
 
+
+//serverce
+Route::get('/admin', function () {
+    return redirect()->route('admin.dashboard.index'); // Redirect to admin dashboard
+});
+Route::get('/dashboard', function () {
+    return redirect()->route('admin.dashboard.index'); // Redirect to admin dashboard
+});
 // admin
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('products', ManageProducts::class);
-    Route::resource('users', ManageUsers::class);
+    Route::resource('/dashboard', DashboardController::class);
+    
+    Route::resource('/products', ManageProducts::class);
+    Route::resource('/users', ManageUsers::class);
 });
-Route::resource('admin', DashboardController::class); 
-Route::resource('dashboard', DashboardController::class);
-
-
-// 
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('products', ManageProducts::class);
-    Route::resource('users', ManageUsers::class);
-});
-// 
-Route::get('/products', [ManageProducts::class, 'index'])->name('products.index');
-Route::post('/products', [ManageProducts::class, 'store'])->name('products.store');
-Route::get('/admin/products/create', [ProductController::class, 'create'])->name('admin.products.create');
