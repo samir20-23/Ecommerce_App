@@ -10,6 +10,14 @@ class UserRepository implements UserRepositoryInterface
     {
         return User::all();
     }
+    public function count()
+    {
+        return User::count();
+    }
+    public function paginate()
+    {
+        return User::paginate(6);
+    } 
     public function create(array $data)
     {
         return User::create($data);

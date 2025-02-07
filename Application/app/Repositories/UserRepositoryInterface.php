@@ -7,6 +7,10 @@ interface UserRepositoryInterface
     public function all();
 
     public function create(array $data);
+    
+    public function count();
+
+    public function paginate();
 
     public function update(array $data, $id);
 

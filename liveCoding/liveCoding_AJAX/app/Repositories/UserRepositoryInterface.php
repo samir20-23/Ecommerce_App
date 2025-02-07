@@ -10,6 +10,8 @@ interface UserRepositoryInterface
     
     public function count();
 
+    public function paginate();
+
     public function update(array $data, $id);
 
     public function delete($id);

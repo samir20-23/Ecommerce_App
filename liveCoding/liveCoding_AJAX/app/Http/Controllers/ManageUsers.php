@@ -16,7 +16,7 @@ class ManageUsers extends Controller
     public function index()
     {
         $paginate = $this->UserRepository->paginate();
-        $users = $this->UserRepository->getAll();
+        $users = $this->UserRepository->all();
 
         return view('admin.users.index', compact('users','paginate'));
     }
@@ -31,23 +31,28 @@ class ManageUsers extends Controller
         $data = $request->validate([
             'name' => 'required',
             'email' => 'required|unique:users,email',
-            'password' => 'required|confirmed'
+            'password' => 'required|confirmed',
         ]);
-
+    
+        // Set a default value for 'role' if not provided
+        $data['role'] = $data['role'] ?? 'user';
+    
+        // Create the user
         $user = $this->UserRepository->create($data);
-
+    
         return redirect()->route('admin.users.index');
     }
+    
 
     public function show($id)
     {
-        $user = $this->UserRepository->getById($id);
+        $user = $this->UserRepository->find($id);
         return view('admin.users.show', compact('user'));
     }
 
     public function edit($id)
     {
-        $user = $this->UserRepository->getById($id);
+        $user = $this->UserRepository->find($id);
         return view('admin.users.edit', compact('user'));
     }
 
