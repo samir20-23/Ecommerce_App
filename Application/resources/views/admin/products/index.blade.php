@@ -1,6 +1,120 @@
 @extends('layouts.app')
 
 @section('title', 'Products')
+@section('css')
+<style>
+    /* Global Styles */
+    body {
+        background: linear-gradient(135deg, #340b5d2c, #2e1e6f47);
+        font-family: 'Roboto', sans-serif;
+        color: #333;
+    }
+    
+    /* Container */
+    .container {
+        margin-top: 30px;
+    }
+
+    /* Card Layout for the Table */
+    .card {
+        background-color: #fff;
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 0.8s ease;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Table Styling */
+    .table-responsive {
+        margin-top: 20px;
+    }
+    
+    .table thead th {
+        background-color: #5563DE;
+        color: #fff;
+        border: none;
+    }
+    
+    .table tbody tr {
+        transition: background-color 0.3s ease;
+    }
+    
+    .table tbody tr:hover {
+        background-color: #f5f5f5;
+    }
+    
+    /* Buttons */
+    .btn-primary {
+        background-color: #5563DE;
+        border-color: #5563DE;
+    }
+    
+    .btn-primary:hover {
+        background-color: #3b4bb4;
+        border-color: #3b4bb4;
+    }
+    
+    .btn-info, .btn-warning, Delete {
+        transition: transform 0.3s ease;
+    }
+    
+    .btn-info:hover, .btn-warning:hover, Delete:hover {
+        transform: scale(1.05);
+    }
+    .btnDelete{
+        border: none;
+        padding: none;
+        background: rgba(255, 0, 0, 0.774);
+        animation: movebtns 2s infinite alternate-reverse;
+    }
+    #edit{
+        border: none;
+        padding: none; 
+        animation: movebtns 1s infinite alternate-reverse;
+    }
+    #view{
+        border: none;
+        padding: none; 
+        animation: movebtns 5s infinite alternate-reverse;
+    }
+    @keyframes movebtns {
+        0%{
+            transform: translate(0.9px,0.4px);
+        }
+        50%{
+            transform: translate(0px,0px);
+        }
+        100%{
+            transform: translate(0.5px,0.9px);
+        }
+    }
+    
+    /* Modal */
+    .modal-content {
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        animation: slideIn 0.4s ease-out;
+    }
+    
+    @keyframes slideIn {
+        from { transform: translateY(-50px); opacity: 0; }
+        to   { transform: translateY(0); opacity: 1; }
+    }
+    
+    .modal-header {
+        border-bottom: none;
+    }
+    
+    .modal-body {
+        padding: 2rem;
+    }
+</style>
+@endsection
 
 @section('content')
 <div class="container">
@@ -39,12 +153,12 @@
                     @endif
                 </td>
                 <td>
-                    <a href="javascript:void(0)" class="btn btn-info btn-sm showProductBtn" data-id="{{ $product->id }}">View</a>
-                    <a href="javascript:void(0)" class="btn btn-warning btn-sm editProductBtn" data-id="{{ $product->id }}">Edit</a>
+                    <a href="javascript:void(0)" class="btn btn-info btn-sm showProductBtn" data-id="{{ $product->id }}" id="view" >View</a>
+                    <a href="javascript:void(0)" class="btn btn-warning btn-sm editProductBtn" data-id="{{ $product->id }}" id="edit" >Edit</a>
                     <form action="{{ route('admin.products.destroy', $product) }}" method="POST" class="d-inline" id="deleteForm-{{ $product->id }}">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-danger btn-sm delete-btn" data-id="{{ $product->id }}">Delete</button>
+                        <button class="btnDelete btn-sm delete-btn" data-id="{{ $product->id }}">Delete</button>
                     </form>
                 </td>
             </tr>
@@ -127,12 +241,12 @@ $(document).ready(function() {
                      '<td>' + product.stock + '</td>' +
                      '<td>' + imageHtml + '</td>' +
                      '<td>' +
-                        '<a href="javascript:void(0)" class="btn btn-info btn-sm showProductBtn" data-id="' + product.id + '">View</a> ' +
-                        '<a href="javascript:void(0)" class="btn btn-warning btn-sm editProductBtn" data-id="' + product.id + '">Edit</a> ' +
+                        '<a href="javascript:void(0)" class="btn btn-info btn-sm showProductBtn" data-id="' + product.id + '" id="view" >View</a> ' +
+                        '<a href="javascript:void(0)" class="btn btn-warning btn-sm editProductBtn" data-id="' + product.id + '"id="edit" >Edit</a> ' +
                         '<form action="/admin/products/' + product.id + '" method="POST" class="d-inline" id="deleteForm-' + product.id + '">' +
                             '@csrf' +
                             '@method("DELETE")' +
-                            '<button class="btn btn-danger btn-sm delete-btn" data-id="' + product.id + '">Delete</button>' +
+                            '<button class="btnDelete btn-sm delete-btn" data-id="' + product.id + '">Delete</button>' +
                         '</form>' +
                      '</td>' +
                  '</tr>';
@@ -189,12 +303,12 @@ $(document).ready(function() {
                      '<td>' + product.stock + '</td>' +
                      '<td>' + imageHtml + '</td>' +
                      '<td>' +
-                        '<a href="javascript:void(0)" class="btn btn-info btn-sm showProductBtn" data-id="' + product.id + '">View</a> ' +
-                        '<a href="javascript:void(0)" class="btn btn-warning btn-sm editProductBtn" data-id="' + product.id + '">Edit</a> ' +
+                        '<a href="javascript:void(0)" class="btn btn-info btn-sm showProductBtn" data-id="' + product.id + '" id="view" >View</a> ' +
+                        '<a href="javascript:void(0)" class="btn btn-warning btn-sm editProductBtn" data-id="' + product.id + '"id="edit" >Edit</a> ' +
                         '<form action="/admin/products/' + product.id + '" method="POST" class="d-inline" id="deleteForm-' + product.id + '">' +
                             '@csrf' +
                             '@method("DELETE")' +
-                            '<button class="btn btn-danger btn-sm delete-btn" data-id="' + product.id + '">Delete</button>' +
+                            '<button class="btnDelete btn-sm delete-btn" data-id="' + product.id + '">Delete</button>' +
                         '</form>' +
                      '</td>';
                      
