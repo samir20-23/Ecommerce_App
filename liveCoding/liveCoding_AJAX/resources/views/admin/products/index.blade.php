@@ -55,6 +55,10 @@
             @endforelse
         </tbody>
     </table>
+      <!-- Pagination -->
+      <div class="d-flex justify-content-center mt-4">
+        {{ $products->links('pagination::bootstrap-4') }}
+    </div>
 </div>
 
 <!-- Bootstrap Modal -->

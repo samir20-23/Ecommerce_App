@@ -15,7 +15,7 @@
                 <th>Actions</th>
             </tr>
         </thead>
-        <tbody>
+        {{-- <tbody>
             @forelse ($users as $user)
                 <tr>
                     <td>{{ $user->id }}</td>
@@ -36,7 +36,7 @@
                     <td colspan="4">No users found.</td>
                 </tr>
             @endforelse
-        </tbody>
+        </tbody> --}}
     </table>
 </div>
 @endsection

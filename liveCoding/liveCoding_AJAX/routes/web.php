@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Product;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ManageProducts;
 use App\Http\Controllers\ManageUsers;
@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\Auth;
 
 
 //user
-Route::get('/', [ProductController::class, 'index'])->name('home');
-Route::get('/home', [ProductController::class, 'index'])->name('home');
-Route::get('/product', [ProductController::class, 'index'])->name('home');
-Route::resource('product', ProductController::class);
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/product', [HomeController::class, 'index'])->name('home');
+Route::resource('product', HomeController::class);
 
 // admin
 Route::prefix('admin')->name('admin.')->group(function () {
